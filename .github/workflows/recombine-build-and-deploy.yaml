@@ -2,9 +2,10 @@ name: Build Custom Docker Image
 
 on:
   push:
+    tags:
+      - 'v*.*.*'  
     branches:
-      - 'main'
-      - 'feature/**'
+      - dev
   workflow_dispatch:
 
 env:
