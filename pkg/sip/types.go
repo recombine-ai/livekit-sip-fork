@@ -284,6 +284,7 @@ func HeadersToAttrs(attrs, hdrToAttr map[string]string, opts livekit.SIPHeaderOp
 }
 
 func AttrsToHeaders(attrs, attrToHdr, headers map[string]string) map[string]string {
+	logger.Infow("AttrsToHeaders", "attrs", attrs, "attrToHdr", attrToHdr, "headers", headers)
 	if len(attrToHdr) == 0 {
 		return headers
 	}
