@@ -1556,11 +1556,13 @@ func (c *sipInbound) SetCall(call *inboundCall) {
 }
 
 func (c *sipInbound) fillHeaders(headers map[string]string) map[string]string {
+	logger.Infow("MYLOG: fillHeaders", c == nil, c.call == nil, len(c.call.attrsToHdr))
 	if c == nil || c.call == nil || len(c.call.attrsToHdr) == 0 {
 		return headers
 	}
 	r := c.call.lkRoom.Room()
 	if r == nil {
+		logger.Infow("MYLOG: fillHeaders r is nil")
 		return headers
 	}
 	return AttrsToHeaders(r.LocalParticipant.Attributes(), c.call.attrsToHdr, headers)
@@ -1884,11 +1886,14 @@ func (c *sipInbound) setCSeq(req *sip.Request) {
 }
 
 func (c *sipInbound) sendBye(ctx context.Context) {
+	logger.Infow("MYLOG: sendBye")
 	ctx = context.WithoutCancel(ctx)
 	if c.inviteOk == nil {
+		logger.Infow("MYLOG: call wasn't established")
 		return // call wasn't established
 	}
 	if c.invite == nil {
+		logger.Infow("MYLOG: rejected or closed")
 		return // rejected or closed
 	}
 	ctx, span := Tracer.Start(ctx, "sip.inbound.sendBye")
@@ -1896,6 +1901,7 @@ func (c *sipInbound) sendBye(ctx context.Context) {
 	// This function is for clients, so we need to swap src and dest
 	r := sip.NewByeRequest(c.invite, c.inviteOk, nil)
 	for k, v := range c.fillHeaders(nil) {
+		logger.Infow("MYLOG: append header", k, v)
 		r.AppendHeader(sip.NewHeader(k, v))
 	}
 
