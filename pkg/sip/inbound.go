@@ -1556,7 +1556,7 @@ func (c *sipInbound) SetCall(call *inboundCall) {
 }
 
 func (c *sipInbound) fillHeaders(headers map[string]string) map[string]string {
-	logger.Infow("MYLOG: fillHeaders", c == nil, c.call == nil, len(c.call.attrsToHdr))
+	logger.Infow("MYLOG: fillHeaders", "c", c == nil, "call", c.call == nil, "attrsToHdr", len(c.call.attrsToHdr))
 	if c == nil || c.call == nil || len(c.call.attrsToHdr) == 0 {
 		return headers
 	}
@@ -1901,7 +1901,7 @@ func (c *sipInbound) sendBye(ctx context.Context) {
 	// This function is for clients, so we need to swap src and dest
 	r := sip.NewByeRequest(c.invite, c.inviteOk, nil)
 	for k, v := range c.fillHeaders(nil) {
-		logger.Infow("MYLOG: append header", k, v)
+		logger.Infow("MYLOG: append header", "k", k, "v", v)
 		r.AppendHeader(sip.NewHeader(k, v))
 	}
 
